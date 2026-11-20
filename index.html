@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Velvet Alchemy — Home Delivery Cocktail & ABV Guide</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; scroll-behavior: smooth; }
+    body { background: #0b0908; color: #f5efe6; min-height: 100vh; }
+
+    /* Navbar */
+    nav {
+      position: sticky; top: 0; z-index: 60;
+      background: rgba(11, 9, 8, 0.92); backdrop-filter: blur(10px);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.9rem 1.6rem; border-bottom: 1px solid rgba(212, 163, 89, 0.25);
+    }
+    .brand { color: #d4a359; font-weight: 800; letter-spacing: 1px; font-size: 1.05rem; }
+    .nav-links { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .nav-links a { color: #f5efe6; text-decoration: none; font-size: 0.85rem; }
+    .nav-links a:hover { color: #d4a359; }
+
+    button, select, input {
+      background: #181411; color: #f5efe6;
+      border: 1px solid rgba(212, 163, 89, 0.35);
+      padding: 0.5rem 0.85rem; border-radius: 8px; font-size: 0.85rem;
+    }
+    button { cursor: pointer; transition: 0.2s; }
+    button:hover { border-color: #d4a359; }
+
+    .bag-btn {
+      background: #d4a359; color: #090807; font-weight: 700;
+      border: none; border-radius: 999px; padding: 0.48rem 0.95rem;
+    }
+
+    /* Hero & ABV Tiers */
+    .hero {
+      text-align: center; padding: 3.6rem 1.2rem;
+      background: radial-gradient(circle at top, rgba(212, 163, 89, 0.16), transparent 68%);
+      border-bottom: 1px solid rgba(212, 163, 89, 0.16);
+    }
+    .hero h1 { font-size: clamp(1.9rem, 4vw, 2.7rem); color: #f0cb8b; margin-bottom: 0.6rem; }
+    .hero p { color: #a39887; max-width: 600px; margin: 0 auto 1.4rem; font-size: 0.92rem; }
+    .cta-link {
+      display: inline-block; background: #d4a359; color: #090807;
+      text-decoration: none; font-weight: 700; padding: 0.65rem 1.4rem; border-radius: 999px;
+    }
+
+    section { max-width: 1160px; margin: 0 auto; padding: 2.5rem 1.2rem; }
+    .sec-head { text-align: center; margin-bottom: 1.5rem; }
+    .sec-head h2 { color: #d4a359; font-size: 1.65rem; }
+    .sec-head p { color: #a39887; font-size: 0.86rem; margin-top: 0.25rem; }
+
+    .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.9rem; }
+    .tier-card { background: #15120f; border: 1px solid rgba(212, 163, 89, 0.2); border-radius: 12px; padding: 1rem; }
+    .tier-card p { color: #a39887; font-size: 0.8rem; margin-top: 0.3rem; }
+
+    /* Filters */
+    .tabs { display: flex; flex-wrap: wrap; gap: 0.45rem; justify-content: center; margin-bottom: 0.9rem; }
+    .tab.active { background: #d4a359; color: #090807; font-weight: 700; border-color: #d4a359; }
+    .filter-row { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 0.65rem; margin-bottom: 1.5rem; }
+    @media (max-width: 720px) { .filter-row { grid-template-columns: 1fr; } }
+
+    /* Cards Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(295px, 1fr)); gap: 1.2rem; }
+    .card {
+      background: #15120f; border: 1px solid rgba(212, 163, 89, 0.22);
+      border-radius: 14px; padding: 1.15rem; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .card:hover { border-color: #d4a359; }
+    .top-line { display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 700; color: #d4a359; text-transform: uppercase; }
+    .price { color: #f0cb8b; font-size: 1rem; }
+    .title { font-size: 1.15rem; margin: 0.25rem 0; }
+    .desc { color: #a39887; font-size: 0.82rem; margin-bottom: 0.75rem; }
+
+    .abv-box { background: rgba(0,0,0,0.35); padding: 0.55rem 0.7rem; border-radius: 8px; margin-bottom: 0.75rem; font-size: 0.76rem; }
+    .abv-top { display: flex; justify-content: space-between; font-weight: 600; }
+    .bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 99px; margin-top: 5px; overflow: hidden; }
+    .fill { height: 100%; }
+
+    .mid { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.85rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .tag { font-size: 0.7rem; padding: 0.2rem 0.55rem; border-radius: 6px; background: rgba(212, 163, 89, 0.12); color: #f0cb8b; }
+
+    .actions { display: flex; gap: 0.45rem; }
+    .btn-gold { flex: 1; background: #d4a359; color: #090807; font-weight: 700; border: none; font-size: 0.8rem; }
+    .btn-dark { background: #211c17; color: #f0cb8b; font-weight: 600; font-size: 0.8rem; }
+    .btn-mock {
+      width: 100%; margin-top: 0.45rem; font-size: 0.75rem;
+      background: rgba(56, 189, 248, 0.1); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.82);
+      display: none; align-items: center; justify-content: center; padding: 1rem; z-index: 100;
+    }
+    .modal.open { display: flex; }
+    .modal-box {
+      background: #161310; border: 1px solid #d4a359; border-radius: 16px;
+      max-width: 540px; width: 100%; padding: 1.4rem; max-height: 90vh; overflow-y: auto; position: relative;
+    }
+    .close-x { position: absolute; top: 0.9rem; right: 0.9rem; font-size: 0.9rem; padding: 0.3rem 0.65rem; }
+    .cart-row { display: flex; justify-content: space-between; align-items: center; padding: 0.55rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.85rem; }
+    .qty-btn { padding: 0.15rem 0.55rem; margin: 0 0.25rem; }
+    .field { width: 100%; margin-top: 0.55rem; }
+
+    footer { text-align: center; padding: 2rem 1rem; border-top: 1px solid rgba(212, 163, 89, 0.2); color: #a39887; font-size: 0.82rem; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="brand">VELVET ALCHEMY</div>
+    <div class="nav-links">
+      <a href="#guide">ABV Guide</a>
+      <a href="#menu">Menu</a>
+      <a href="#delivery">Home Delivery</a>
+      <button class="bag-btn" onclick="openCart()">Delivery Bag (<span id="bagCount">0</span>)</button>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1>Home Delivery Cocktails &amp; ABV Guide</h1>
+    <p>Order craft cocktails, zero-proof mocktails, and party pours straight home — with live ABV meters, 5-axis flavor radar charts, and instant checkout.</p>
+    <a href="#menu" class="cta-link">Browse &amp; Order Now ↓</a>
+  </header>
+
+  <section id="guide">
+    <div class="sec-head">
+      <h2>ABV Strength Guide</h2>
+      <p>Know your drink strength before adding to your home delivery bag</p>
+    </div>
+    <div class="tiers">
+      <div class="tier-card"><strong style="color:#38bdf8">🔵 0.0% Zero-Proof</strong><p>Botanical mocktails with zero alcohol.</p></div>
+      <div class="tier-card"><strong style="color:#34d399">🟢 Low ABV (&lt; 12%)</strong><p>Light spritzes for easy house evenings.</p></div>
+      <div class="tier-card"><strong style="color:#fbbf24">🟡 Classic (12% – 22%)</strong><p>Balanced sours, highballs &amp; martinis.</p></div>
+      <div class="tier-card"><strong style="color:#f87171">🔴 Heavy Hitter (&gt; 22%)</strong><p>Bold, spirit-forward classics for slow sipping.</p></div>
+    </div>
+  </section>
+
+  <section id="menu">
+    <div class="sec-head">
+      <h2>Signature Menu &amp; Online Order</h2>
+      <p>Filter by spirit, ABV tier, or flavor notes and add items to order at home</p>
+    </div>
+
+    <div class="tabs" id="spiritTabs">
+      <button class="tab active" data-s="All">All</button>
+      <button class="tab" data-s="Gin">Gin</button>
+      <button class="tab" data-s="Vodka">Vodka</button>
+      <button class="tab" data-s="Bourbon">Bourbon</button>
+      <button class="tab" data-s="Rum">Rum</button>
+      <button class="tab" data-s="Tequila">Tequila</button>
+      <button class="tab" data-s="Mocktail">Mocktails</button>
+    </div>
+
+    <div class="filter-row">
+      <input id="searchBox" placeholder="Search drink or ingredient..." />
+      <select id="abvSelect">
+        <option value="All">All ABV Strengths</option>
+        <option value="Mocktail">0.0% Zero-Proof</option>
+        <option value="Low">Low ABV (&lt;12%)</option>
+        <option value="Mid">Classic (12–22%)</option>
+        <option value="High">Heavy Hitter (&gt;22%)</option>
+      </select>
+      <select id="flavorSelect">
+        <option value="All">All Flavors</option>
+        <option value="Sweet">Sweet</option>
+        <option value="Smoky">Smoky</option>
+        <option value="Bitter">Bitter</option>
+        <option value="Citrusy">Citrusy</option>
+      </select>
+    </div>
+
+    <div class="grid" id="drinksGrid"></div>
+  </section>
+
+  <footer id="delivery">
+    <strong style="color:#d4a359">THE VELVET ALCHEMY — DOORSTEP DELIVERY</strong>
+    <p style="margin:0.35rem 0">Free home delivery on orders ₹999+ • 30–45 mins chilled dispatch • Paired 0.0% mocktails on every drink</p>
+    <p>CSE 326 Web Development Project</p>
+  </footer>
+
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <button class="close-x" onclick="closeModal()">✕</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const DRINKS = [
+      { id: 1, name: "Smoked Maple Old Fashioned", spirit: "Bourbon", abv: 32, price: 750, tags: ["Smoky", "Sweet", "Bitter"], ing: "60ml Bourbon, Smoked Maple Syrup, Bitters", desc: "Charred oak bourbon stirred with dark maple and aromatic bitters.", radar: [6, 7, 1, 9, 4], alt: 7 },
+      { id: 2, name: "Barrel-Aged Negroni", spirit: "Gin", abv: 24, price: 680, tags: ["Bitter", "Citrusy"], ing: "30ml Gin, 30ml Campari, Sweet Vermouth", desc: "Bold Italian aperitif balancing botanical juniper with bittersweet herbs.", radar: [5, 9, 2, 2, 8], alt: 8 },
+      { id: 3, name: "Oaxacan Ruby Paloma", spirit: "Tequila", abv: 14, price: 640, tags: ["Citrusy", "Smoky"], ing: "45ml Tequila, 15ml Mezcal, Grapefruit, Lime", desc: "Crisp citrus refreshment with earthy agave and light smoke.", radar: [5, 4, 8, 6, 3], alt: 9 },
+      { id: 4, name: "Velvet Espresso Martini", spirit: "Vodka", abv: 19, price: 660, tags: ["Sweet", "Bitter"], ing: "50ml Vodka, 30ml Espresso, Coffee Liqueur", desc: "Silky cold-crema uniting dark roasted espresso with vanilla.", radar: [7, 7, 1, 3, 2], alt: 7 },
+      { id: 5, name: "Hemingway Reserve Daiquiri", spirit: "Rum", abv: 18, price: 620, tags: ["Citrusy", "Sweet"], ing: "55ml White Rum, Maraschino, Lime, Grapefruit", desc: "Bright, crisp tropical classic with delicate cherry notes.", radar: [5, 3, 9, 1, 3], alt: 9 },
+      { id: 6, name: "Elderflower Gin Spritz", spirit: "Gin", abv: 9, price: 590, tags: ["Citrusy", "Sweet"], ing: "35ml Gin, Elderflower, Lemon, Prosecco, Soda", desc: "Light, floral, sessionable low-ABV spritz for easy sipping.", radar: [7, 2, 6, 1, 7], alt: 8 },
+      { id: 7, name: "Ember & Oak Zero-Proof", spirit: "Mocktail", abv: 0, price: 420, tags: ["Smoky", "Sweet", "Bitter"], ing: "Smoked Black Tea, Maple, NA Bitters, Orange", desc: "Zero-proof old fashioned crafted with cold-smoked tea and maple.", radar: [6, 6, 1, 8, 5], alt: null },
+      { id: 8, name: "Crimson Botanical Tonic", spirit: "Mocktail", abv: 0, price: 390, tags: ["Bitter", "Citrusy"], ing: "Juniper Hydrosol, Hibiscus Reduction, Tonic", desc: "Bittersweet aperitif alternative bursting with juniper and herbs.", radar: [4, 8, 5, 1, 9], alt: null },
+      { id: 9, name: "Smoked Ruby Spritz", spirit: "Mocktail", abv: 0, price: 380, tags: ["Citrusy", "Smoky", "Sweet"], ing: "Ruby Grapefruit, Smoked Agave, Lime, Soda", desc: "Zesty zero-proof Paloma with smoked agave and salted citrus.", radar: [6, 4, 8, 5, 3], alt: null }
+    ];
+
+    let spiritFilter = "All", abvFilter = "All", flavorFilter = "All", searchText = "";
+    let bag = [];
+
+    const modal = document.getElementById("modal");
+    const modalBody = document.getElementById("modalBody");
+    const drinksGrid = document.getElementById("drinksGrid");
+
+    function closeModal() { modal.classList.remove("open"); }
+    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+
+    function getAbvInfo(abv) {
+      if (abv === 0) return { label: "Zero-Proof", tier: "Mocktail", color: "#38bdf8", pct: 8 };
+      if (abv < 12) return { label: "Low ABV", tier: "Low", color: "#34d399", pct: Math.min(100, abv * 2.5) };
+      if (abv <= 22) return { label: "Classic", tier: "Mid", color: "#fbbf24", pct: Math.min(100, abv * 2.5) };
+      return { label: "Heavy Hitter", tier: "High", color: "#f87171", pct: Math.min(100, abv * 2.5) };
+    }
+
+    function radarSVG(values, size = 78, withLabels = false) {
+      const axes = ["Sweet", "Bitter", "Sour", "Smoky", "Herbal"];
+      const c = size / 2;
+      const r = withLabels ? size * 0.28 : size * 0.4;
+      const step = (Math.PI * 2) / 5;
+
+      const rings = [0.5, 1].map((s) => {
+        const pts = axes.map((_, i) => {
+          const a = i * step - Math.PI / 2;
+          return `${(c + Math.cos(a) * r * s).toFixed(1)},${(c + Math.sin(a) * r * s).toFixed(1)}`;
+        }).join(" ");
+        return `<polygon points="${pts}" fill="none" stroke="rgba(212,163,89,0.25)" />`;
+      }).join("");
+
+      const poly = axes.map((_, i) => {
+        const a = i * step - Math.PI / 2;
+        const val = (values[i] || 0) / 10;
+        return `${(c + Math.cos(a) * r * val).toFixed(1)},${(c + Math.sin(a) * r * val).toFixed(1)}`;
+      }).join(" ");
+
+      const labels = withLabels ? axes.map((label, i) => {
+        const a = i * step - Math.PI / 2;
+        const lx = (c + Math.cos(a) * (r + 17)).toFixed(1);
+        const ly = (c + Math.sin(a) * (r + 17)).toFixed(1);
+        return `<text x="${lx}" y="${ly}" fill="#f0cb8b" font-size="9.5" text-anchor="middle" dominant-baseline="middle">${label}</text>`;
+      }).join("") : "";
+
+      return `<svg width="${size}" height="${size}">${rings}<polygon points="${poly}" fill="rgba(212,163,89,0.35)" stroke="#f0cb8b" stroke-width="2" />${labels}</svg>`;
+    }
+
+    function updateBagBadge() {
+      document.getElementById("bagCount").textContent = bag.reduce((sum, item) => sum + item.qty, 0);
+    }
+
+    function addItem(id) {
+      const drink = DRINKS.find((d) => d.id === id);
+      if (!drink) return;
+      const existing = bag.find((item) => item.id === id);
+      if (existing) existing.qty += 1;
+      else bag.push({ ...drink, qty: 1 });
+      updateBagBadge();
+    }
+
+    function updateQty(id, delta) {
+      const item = bag.find((x) => x.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) bag = bag.filter((x) => x.id !== id);
+      updateBagBadge();
+      openCart();
+    }
+
+    function openCart() {
+      const subtotal = bag.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const deliveryFee = subtotal === 0 || subtotal >= 999 ? 0 : 60;
+      const grandTotal = subtotal + deliveryFee;
+
+      const itemsHtml = bag.length === 0
+        ? `<p style="color:#a39887;font-size:0.88rem;margin:0.8rem 0">Bag khali hai. Menu se cocktails ya mocktails add karo.</p>`
+        : bag.map((item) => `
+            <div class="cart-row">
+              <div>
+                <strong>${item.name}</strong>
+                <div style="color:#a39887;font-size:0.76rem">₹${item.price} × ${item.qty} (${item.abv}% ABV)</div>
+              </div>
+              <div>
+                <button class="qty-btn" onclick="updateQty(${item.id}, -1)">-</button>
+                <strong>${item.qty}</strong>
+                <button class="qty-btn" onclick="updateQty(${item.id}, 1)">+</button>
+              </div>
+            </div>
+          `).join("");
+
+      const checkoutHtml = bag.length === 0 ? "" : `
+        <div style="margin-top:0.85rem;font-size:0.86rem">
+          <div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>₹${subtotal}</span></div>
+          <div style="display:flex;justify-content:space-between;margin-top:0.25rem"><span>Delivery Fee (Free ₹999+)</span><span>${deliveryFee === 0 ? "FREE" : "₹" + deliveryFee}</span></div>
+          <div style="display:flex;justify-content:space-between;margin-top:0.45rem;font-weight:700;color:#f0cb8b;font-size:1rem"><span>Total Payable</span><span>₹${grandTotal}</span></div>
+        </div>
+        <input id="custName" class="field" placeholder="Full Name" />
+        <input id="custPhone" class="field" placeholder="Mobile Number" />
+        <input id="custAddress" class="field" placeholder="House / Flat, Street, Area, City" />
+        <select id="payMode" class="field">
+          <option value="UPI / GPay / PhonePe">UPI / GPay / PhonePe</option>
+          <option value="Cash on Delivery">Cash on Delivery</option>
+          <option value="Card on Delivery">Card on Delivery</option>
+        </select>
+        <button class="btn-gold field" style="padding:0.68rem" onclick="confirmOrder(${grandTotal})">Place Home Delivery Order →</button>
+      `;
+
+      modalBody.innerHTML = `<h2 style="color:#d4a359;margin-bottom:0.4rem">Home Delivery Bag</h2>${itemsHtml}${checkoutHtml}`;
+      modal.classList.add("open");
+    }
+
+    function confirmOrder(total) {
+      const name = (document.getElementById("custName")?.value || "").trim() || "Customer";
+      const phone = (document.getElementById("custPhone")?.value || "").trim() || "Not provided";
+      const address = (document.getElementById("custAddress")?.value || "").trim() || "Home Address";
+      const pay = document.getElementById("payMode")?.value || "UPI";
+      const summary = bag.map((i) => `${i.qty}× ${i.name}`).join(", ");
+      const orderNo = "VA" + Math.floor(10000 + Math.random() * 90000);
+
+      bag = [];
+      updateBagBadge();
+
+      modalBody.innerHTML = `
+        <h2 style="color:#34d399;margin-bottom:0.35rem">Order Confirmed! (#${orderNo})</h2>
+        <p style="font-size:0.88rem;color:#d6cec2;margin-bottom:0.8rem">Shukriya <strong>${name}</strong>, aapka home delivery order place ho gaya hai.</p>
+        <div style="background:#100d0b;border:1px solid rgba(212,163,89,0.3);border-radius:10px;padding:0.9rem;font-size:0.84rem;line-height:1.65">
+          <div><strong>Items:</strong> ${summary}</div>
+          <div><strong>Address:</strong> ${address}</div>
+          <div><strong>Phone:</strong> ${phone}</div>
+          <div><strong>Payment:</strong> ${pay} • <strong>Total:</strong> ₹${total}</div>
+          <div style="color:#38bdf8;margin-top:0.35rem"><strong>Estimated Delivery:</strong> 35–45 mins</div>
+        </div>
+      `;
+    }
+
+    function openDetail(id) {
+      const d = DRINKS.find((x) => x.id === id);
+      if (!d) return;
+      const info = getAbvInfo(d.abv);
+      const alt = d.alt ? DRINKS.find((x) => x.id === d.alt) : null;
+
+      modalBody.innerHTML = `
+        <div class="top-line"><span>${d.spirit}</span><span class="price">₹${d.price}</span></div>
+        <h2 class="title" style="font-size:1.35rem">${d.name}</h2>
+        <p class="desc">${d.desc}</p>
+        <div style="text-align:center;background:#100d0b;padding:0.8rem;border-radius:10px;margin-bottom:0.8rem">
+          ${radarSVG(d.radar, 185, true)}
+        </div>
+        <p style="font-size:0.84rem;color:#d6cec2;margin-bottom:0.75rem"><strong>Ingredients:</strong> ${d.ing}</p>
+        <div class="abv-box">
+          <div class="abv-top"><span style="color:${info.color}">${info.label}</span><span>${d.abv}% ABV</span></div>
+          <div class="bar"><div class="fill" style="width:${info.pct}%;background:${info.color}"></div></div>
+        </div>
+        <button class="btn-gold" style="width:100%;padding:0.62rem" onclick="addItem(${d.id});openCart()">Add to Home Bag — ₹${d.price}</button>
+        ${alt ? `<button class="btn-mock" onclick="openDetail(${alt.id})">0.0% Alternative: ${alt.name} →</button>` : ""}
+      `;
+      modal.classList.add("open");
+    }
+
+    function renderDrinks() {
+      const list = DRINKS.filter((d) => {
+        const sOk = spiritFilter === "All" || d.spirit === spiritFilter;
+        const aOk = abvFilter === "All" || getAbvInfo(d.abv).tier === abvFilter;
+        const fOk = flavorFilter === "All" || d.tags.includes(flavorFilter);
+        const q = searchText.trim().toLowerCase();
+        const qOk = !q || d.name.toLowerCase().includes(q) || d.ing.toLowerCase().includes(q);
+        return sOk && aOk && fOk && qOk;
+      });
+
+      if (list.length === 0) {
+        drinksGrid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#a39887">Koi drink match nahi hui. Filter change karke dekho.</div>`;
+        return;
+      }
+
+      drinksGrid.innerHTML = list.map((d) => {
+        const info = getAbvInfo(d.abv);
+        const alt = d.alt ? DRINKS.find((x) => x.id === d.alt) : null;
+        return `
+          <article class="card">
+            <div>
+              <div class="top-line"><span>${d.spirit}</span><span class="price">₹${d.price}</span></div>
+              <h3 class="title">${d.name}</h3>
+              <p class="desc">${d.desc}</p>
+              <div class="abv-box">
+                <div class="abv-top"><span style="color:${info.color}">${info.label}</span><span>${d.abv}% ABV</span></div>
+                <div class="bar"><div class="fill" style="width:${info.pct}%;background:${info.color}"></div></div>
+              </div>
+              <div class="mid">
+                ${radarSVG(d.radar, 78, false)}
+                <div class="tags">${d.tags.map((t) => `<span class="tag">${t}</span>`).join("")}</div>
+              </div>
+            </div>
+            <div>
+              <div class="actions">
+                <button class="btn-dark" onclick="openDetail(${d.id})">Radar &amp; Recipe</button>
+                <button class="btn-gold" onclick="addItem(${d.id})">+ Add to Bag</button>
+              </div>
+              ${alt ? `<button class="btn-mock" onclick="openDetail(${alt.id})">0.0% Alt: ${alt.name}</button>` : ""}
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    document.getElementById("spiritTabs").addEventListener("click", (e) => {
+      const btn = e.target.closest(".tab");
+      if (!btn) return;
+      document.querySelectorAll("#spiritTabs .tab").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      spiritFilter = btn.dataset.s;
+      renderDrinks();
+    });
+
+    document.getElementById("abvSelect").addEventListener("change", (e) => { abvFilter = e.target.value; renderDrinks(); });
+    document.getElementById("flavorSelect").addEventListener("change", (e) => { flavorFilter = e.target.value; renderDrinks(); });
+    document.getElementById("searchBox").addEventListener("input", (e) => { searchText = e.target.value; renderDrinks(); });
+
+    renderDrinks();
+  </script>
+</body>
+</html>
